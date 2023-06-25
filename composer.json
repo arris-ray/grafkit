@@ -1,0 +1,12 @@
+{
+  "name": "arris-ray/grafkit",
+  "type": "standard",
+  "description": "A toolkit of Grafana utilities.",
+  "homepage": "https://github.com/arris-ray/grafkit",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Grafkit\\": "src/"
+    }
+  }
+}
