@@ -11,6 +11,7 @@
 #
 # Depends on:
 # - Bash
+# - Direnv
 # - Docker
 #
 # Based on Bash Boilerplate: https://github.com/xwmx/bash-boilerplate
