@@ -1,7 +1,22 @@
 FROM php:8.2-cli
 
+# Update env vars
+ENV PATH="${PATH}:/app/vendor/bin"
+
 # Create app directory
 RUN mkdir -p /app
+WORKDIR /app
+
+# Install system utilities
+RUN apt update -y \
+    && apt install -y git unzip vim wget
+
+# Install application depedencies
+RUN apt install -y libyaml-dev libzip-dev \
+    && printf "\n" | pecl install yaml \
+      && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini \
+      && docker-php-ext-enable yaml \
+    && docker-php-ext-install zip
 
 # Install Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
