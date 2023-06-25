@@ -795,7 +795,10 @@ build() {
         _no_cache=1
         ;;
       *)
-        _exit_1 printf "Unexpected option: %s\\n" "${__arg}"
+        if ! _blank "${__arg}"
+        then
+          _exit_1 printf "Unexpected option: %s\\n" "${__arg}"
+        fi
         ;;
     esac
   done
