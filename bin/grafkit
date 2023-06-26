@@ -366,6 +366,32 @@ _piped_input() {
   ! _interactive_input
 }
 
+# _run_container()
+#
+# Usage:
+#   _run_container <arguments>
+#
+# Exit / Error Status:
+#   0 (success, true)  If the current input is stdin / piped input.
+#   1 (error,  false)  If the current input is interactive (eg, a shell).
+_run_container() {
+  # Copy the Chrome Cookie Jar locally
+  cp "/Users/aray/Library/Application Support/Google/Chrome/Default/Cookies" "$(pwd)/resources/cookies"
+
+  # Request login password to decrypt stored cookies
+  local PASSWORD
+  PASSWORD=$(security find-generic-password -w -s "Chrome Safe Storage")
+
+  # Run the given command in the Grafkit container
+  docker run -it \
+    --mount type=bind,source="$(pwd)",target=/app \
+    --env CHROME_SAFE_STORAGE="${PASSWORD}" \
+    grafkit "${@}"
+
+  # Remove the local copy of the Chrome Cookie Jar
+  rm "$(pwd)/resources/cookies"
+}
+
 ###############################################################################
 # describe
 ###############################################################################
@@ -539,6 +565,9 @@ do
     -s|--shell)
       _SUBCOMMAND="shell"
       ;;
+    -t|--test)
+      _SUBCOMMAND="test"
+      ;;
     --version)
       _SUBCOMMAND="version"
       ;;
@@ -567,6 +596,7 @@ _DEFINED_SUBCOMMANDS=(
   build
   replace
   shell
+  test
 )
 
 # _main()
@@ -822,10 +852,21 @@ Description:
   Shells into a ${_ME} Docker container.
 HEREDOC
 shell() {
-  docker run -it \
-    --mount type=bind,source="$(pwd)",target=/app \
-    grafkit \
-    bash
+  _run_container bash
+}
+
+# Test ########################################################################
+
+describe "test" <<HEREDOC
+Usage:
+  ${_ME} test
+
+Description:
+  Tests running a command in a ${_ME} Docker container.
+HEREDOC
+test() {
+  # Run task
+  _run_container castor grafkit:test
 }
 
 ###############################################################################
