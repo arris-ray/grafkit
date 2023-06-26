@@ -39,3 +39,4 @@ Available subcommands:
 ## References
 1. Github, [xmwx/bash-boilerplate](https://github.com/xwmx/bash-boilerplate) - Grafkit shell script boilerplate.
 2. Github, [php-pds/skeleton](https://github.com/php-pds/skeleton) - Grafkit project structure.
+3. PHP-FIG, [PHP Standards Recommendations](https://www.php-fig.org/psr/)
