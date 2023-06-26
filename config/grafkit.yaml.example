@@ -1,0 +1,4 @@
+grafkit:
+  hostnames:
+    production: grafana.production.example.com
+    staging: grafana.staging.example.com
