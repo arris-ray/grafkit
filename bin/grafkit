@@ -796,26 +796,27 @@ build() {
 
 describe "cache" <<HEREDOC
 Usage:
-  ${_ME} cache
+  ${_ME} cache <label>
 
 Description:
   Generates a local cache of all Grafana dashboards.
 HEREDOC
 cache() {
-  _run_container castor grafkit:cache
+  _run_container castor grafkit:cache "${1-}"
 }
 
 # Find ########################################################################
 
 describe "find" <<HEREDOC
 Usage:
-  ${_ME} find <regex>
+  ${_ME} find <search>
 
 Description:
-  Find the set of dashboards that contain the given regex pattern.
+  Find the set of dashboards that contain the given regex search pattern.
 HEREDOC
 find() {
-  _run_container castor grafkit:find "${1-}"
+  [[ -z "${1:-}" ]] && _exit_1 printf "find(): <search> required.\\n"
+  _run_container castor grafkit:find "${1}"
 }
 
 # Shell #######################################################################

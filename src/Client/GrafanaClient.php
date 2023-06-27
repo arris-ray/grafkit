@@ -96,7 +96,7 @@ class GrafanaClient
         // Refresh the dashboard metadata cache, if necessary
         if ($refreshCache || $dashboardMetadatas === null) {
             $dashboardMetadatas = $this->requestDashboardMetadatas();
-            DashboardCache::getInstance()->cacheDashboardMetadatas($this->label, json_encode($dashboardMetadatas));
+            DashboardCache::getInstance()->cacheDashboardMetadatas($this->label, $dashboardMetadatas);
             $dashboardMetadatas = DashboardCache::getInstance()->getCachedDashboardMetadatas($this->label);
         }
         return $dashboardMetadatas;

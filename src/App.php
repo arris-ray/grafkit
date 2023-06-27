@@ -2,6 +2,7 @@
 
 namespace Grafkit;
 
+use Grafkit\Cache\DashboardCache;
 use Grafkit\Client\DashboardMetadata;
 use Grafkit\Client\GrafanaClient;
 use Grafkit\Configuration\Configuration;
@@ -29,12 +30,18 @@ class App
     }
 
     /**
+     * @param string|null $label
      * @return void
      * @throws Exception\GrafanaClientException
      */
-    public function refreshDashboardCache(): void
+    public function refreshDashboardCache(?string $label = null): void
     {
-        foreach ($this->configuration->hostnames->hostnames as $hostname) {
+        $hostnames = $this->configuration->hostnames->hostnames;
+        if ($label !== null && array_key_exists($label, $hostnames)) {
+            $hostnames = [$hostnames[$label]];
+        }
+
+        foreach ($hostnames as $hostname) {
             $client = new GrafanaClient($hostname->label, $hostname->url);
             $dashboards = $client->getDashboardMetadatas(true);
             foreach ($dashboards as $dashboard) {
@@ -52,7 +59,8 @@ class App
     public function searchDashboards(string $regex): array
     {
         $dir = Env::DIR_RESOURCES_CACHE_DASHBOARD;
-        $command = "grep -oR \"{$regex}\" {$dir} | uniq";
+        $metadataFilename = DashboardCache::DASHBOARD_METADATA_FILENAME;
+        $command = "grep -oR \"{$regex}\" {$dir} --exclude '{$metadataFilename}' | uniq";
         $output = shell_exec($command);
         $output ??= "";
 

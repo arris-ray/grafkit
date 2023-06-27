@@ -3,6 +3,7 @@
 namespace Grafkit\Lib;
 
 use Grafkit\Cache\DashboardCache;
+use Grafkit\Client\DashboardMetadata;
 
 class GrepResultBuilder
 {
@@ -61,17 +62,22 @@ class GrepResultBuilder
      */
     public function build(): GrepResult
     {
+        $label = '';
+        $dashboardMetadata = $this->getDashboardMetadata($this->path, $label);
         return new GrepResult(
-            $this->lookupDashboardUrl($this->path),
+            $label,
+            $dashboardMetadata->uid,
+            $dashboardMetadata->url,
             $this->pattern
         );
     }
 
     /**
      * @param string $cachePath
-     * @return string|null
+     * @param string $label
+     * @return DashboardMetadata|null
      */
-    private function lookupDashboardUrl(string $cachePath): ?string
+    private function getDashboardMetadata(string $cachePath, string & $label): ?DashboardMetadata
     {
         // Split the result into the path and pattern-match components
         $tokens = explode(DIRECTORY_SEPARATOR, $cachePath);
@@ -80,10 +86,10 @@ class GrepResultBuilder
         $label = array_shift($reverseTokens);
 
         // Lookup the dashboard URL by its UID
-        $jsonDashboardMetadatas = DashboardCache::getInstance()->getCachedDashboardMetadatas($label);
-        foreach ($jsonDashboardMetadatas as $jsonDashboardMetadata) {
-            if ($jsonDashboardMetadata->uid === $filename) {
-                return $jsonDashboardMetadata->url;
+        $dashboardMetadatas = DashboardCache::getInstance()->getCachedDashboardMetadatas($label);
+        foreach ($dashboardMetadatas as $dashboardMetadata) {
+            if ($dashboardMetadata->uid === $filename) {
+                return $dashboardMetadata;
             }
         }
         return null;
