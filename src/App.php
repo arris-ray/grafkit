@@ -44,19 +44,6 @@ class App
     }
 
     /**
-     * @return DashboardMetadata[]
-     */
-    public function getAllDashboardMetadatas(): array
-    {
-        $dashboardMetadatas = [];
-        foreach ($this->configuration->hostnames->hostnames as $hostname) {
-            $client = new GrafanaClient($hostname->label, $hostname->url);
-            $dashboardMetadatas = array_merge($dashboardMetadatas, $client->getDashboardMetadatas());
-        }
-        return $dashboardMetadatas;
-    }
-
-    /**
      * Returns a list of all cached dashboards that contain the given {@see $regex} pattern.
      *
      * @param string $regex
