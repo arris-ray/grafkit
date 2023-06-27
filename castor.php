@@ -12,10 +12,10 @@ function cache(): void
 }
 
 #[AsTask]
-function find(string $regex): void
+function find(string $search): void
 {
-    $results = App::getInstance()->searchDashboards("$regex");
+    $results = App::getInstance()->searchDashboards("$search");
     foreach ($results as $result) {
-        echo ("{$result->path}: {$result->pattern}" . PHP_EOL);
+        echo ("{$result->url}: {$result->pattern}" . PHP_EOL);
     }
 }

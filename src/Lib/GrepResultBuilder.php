@@ -3,7 +3,6 @@
 namespace Grafkit\Lib;
 
 use Grafkit\Cache\DashboardCache;
-use Grafkit\Client\DashboardMetadataBuilder;
 
 class GrepResultBuilder
 {
