@@ -52,7 +52,7 @@ class Loader
     {
         $hostnames = [];
         foreach ($settings as $label => $url) {
-            $hostnames[] = new Hostname($label, $url);
+            $hostnames[$label] = new Hostname($label, $url);
         }
         return new Hostnames($hostnames);
     }
