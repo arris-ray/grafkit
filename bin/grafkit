@@ -559,6 +559,12 @@ do
     -b|--build)
       _SUBCOMMAND="build"
       ;;
+    -c|--cache)
+      _SUBCOMMAND="cache"
+      ;;
+    -f|--find)
+      _SUBCOMMAND="find"
+      ;;
     -r|--replace)
       _SUBCOMMAND="replace"
       ;;
@@ -592,12 +598,7 @@ done
 ###############################################################################
 
 # Declare the $_DEFINED_SUBCOMMANDS array.
-_DEFINED_SUBCOMMANDS=(
-  build
-  replace
-  shell
-  test
-)
+_DEFINED_SUBCOMMANDS=()
 
 # _main()
 #
@@ -753,57 +754,6 @@ version() {
 #
 ###############################################################################
 
-# Example Section #############################################################
-
-# --------------------------------------------------------------------- example
-
-describe "example" <<HEREDOC
-Usage:
-  ${_ME} example [<name>] [--farewell]
-
-Options:
-  --farewell  Print "Goodbye, World!"
-
-Description:
-  Print "Hello, World!"
-HEREDOC
-example() {
-  local _arguments=()
-  local _greeting="Hello"
-  local _name=
-
-  for __arg in "${@:-}"
-  do
-    case ${__arg} in
-      --farewell)
-        _greeting="Goodbye"
-        ;;
-      -*)
-        _exit_1 printf "Unexpected option: %s\\n" "${__arg}"
-        ;;
-      *)
-        if _blank "${_name}"
-        then
-          _name="${__arg}"
-        else
-          _arguments+=("${__arg}")
-        fi
-        ;;
-    esac
-  done
-
-
-  if [[ "${_name}" == "Moon" ]]
-  then
-    printf "%s, Luna!\\n" "${_greeting}"
-  elif [[ -n "${_name}" ]]
-  then
-    printf "%s, %s!\\n" "${_greeting}" "${_name}"
-  else
-    printf "%s, World!\\n" "${_greeting}"
-  fi
-}
-
 # Build #######################################################################
 
 describe "build" <<HEREDOC
@@ -842,6 +792,32 @@ build() {
   fi
 }
 
+# Cache #######################################################################
+
+describe "cache" <<HEREDOC
+Usage:
+  ${_ME} cache
+
+Description:
+  Generates a local cache of all Grafana dashboards.
+HEREDOC
+cache() {
+  _run_container castor grafkit:cache
+}
+
+# Find ########################################################################
+
+describe "find" <<HEREDOC
+Usage:
+  ${_ME} find <regex>
+
+Description:
+  Find the set of dashboards that contain the given regex pattern.
+HEREDOC
+find() {
+  _run_container castor grafkit:find "${1-}"
+}
+
 # Shell #######################################################################
 
 describe "shell" <<HEREDOC
@@ -853,20 +829,6 @@ Description:
 HEREDOC
 shell() {
   _run_container bash
-}
-
-# Test ########################################################################
-
-describe "test" <<HEREDOC
-Usage:
-  ${_ME} test
-
-Description:
-  Tests running a command in a ${_ME} Docker container.
-HEREDOC
-test() {
-  # Run task
-  _run_container castor grafkit:test
 }
 
 ###############################################################################

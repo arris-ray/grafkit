@@ -10,9 +10,9 @@ trait Singleton
     private static array $_instance = [];
 
     /**
-     * @return mixed
+     * @return self
      */
-    final public static function getInstance(): mixed
+    final public static function getInstance(): self
     {
         $calledClass = get_called_class();
         if (!isset( static::$_instance[$calledClass])) {
