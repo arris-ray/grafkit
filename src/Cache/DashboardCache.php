@@ -50,7 +50,7 @@ class DashboardCache
      */
     public function doesDashboardCacheExist(string $label, string $uid): bool
     {
-        $cacheDir = implode(DIRECTORY_SEPARATOR, [$this->getDashboardCacheDirectory(), $label, $uid]);
+        $cacheDir = implode(DIRECTORY_SEPARATOR, [$this->getDashboardCacheDirectory($label), $label, $uid]);
         if (!file_exists($cacheDir)) {
             return false;
         }
