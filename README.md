@@ -1,6 +1,4 @@
 # Grafkit
-
-## Usage
 ```
  ______     ______     ______     ______   __  __     __     ______
 /\  ___\   /\  == \   /\  __ \   /\  ___\ /\ \/ /    /\ \   /\__  _\
@@ -26,11 +24,10 @@ Help:
 
 Available subcommands:
   build
-  replace
-  shell
-  build
-  example
+  cache
+  find
   help
+  replace
   shell
   subcommands
   version
