@@ -122,6 +122,42 @@ class GrafanaClient
     }
 
     /**
+     * @param string $json
+     * @param string $message
+     * @return bool
+     * @throws GrafanaClientException
+     */
+    public function updateDashboard(string $json, string $message = ""): bool
+    {
+        try {
+            // Decorate dashboard with fields to trigger an update
+            $updatedDashboard = json_decode($json, true);
+            $updatedDashboard['overwrite'] = true;
+            $updatedDashboard['message'] = $message;
+            $updatedDashboardJson = json_encode($updatedDashboard);
+
+            // Post update request
+            $stream = $this->createStream($updatedDashboardJson);
+            $request = $this->createRequest('POST', 'api/dashboards/db', $stream);
+            $response = $this->client->sendRequest($request);
+            return $response->getStatusCode() === 200;
+        } catch (Throwable $t) {
+            throw new GrafanaClientException($t->getMessage(), $t->getCode(), $t);
+        }
+    }
+
+    /**
+     * Convenience method for wrapping an arbitrary data payload for sending in a {@see RequestInterface}.
+     *
+     * @param string $body
+     * @return StreamInterface
+     */
+    private function createStream(string $body): StreamInterface
+    {
+        return $this->streamFactory->createStream($body);
+    }
+
+    /**
      * Convenience method for creating a request to submit to the Grafana HTTP API.
      *
      * @param string $method
@@ -168,8 +204,8 @@ class GrafanaClient
 
             // Return dashboard metadata
             return json_encode($allDashboards);
-        } catch (Throwable $e) {
-            throw new GrafanaClientException($e->getMessage(), $e->getCode(), $e);
+        } catch (Throwable $t) {
+            throw new GrafanaClientException($t->getMessage(), $t->getCode(), $t);
         }
     }
 

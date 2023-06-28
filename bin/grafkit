@@ -812,11 +812,26 @@ Usage:
   ${_ME} find <search>
 
 Description:
-  Find the set of dashboards that contain the given regex search pattern.
+  Find the set of all Grafana dashboards that contain the given regex search pattern.
 HEREDOC
 find() {
   [[ -z "${1:-}" ]] && _exit_1 printf "find(): <search> required.\\n"
   _run_container castor grafkit:find "${1}"
+}
+
+# Find ########################################################################
+
+describe "replace" <<HEREDOC
+Usage:
+  ${_ME} replace <search> <replace>
+
+Description:
+  Replaces the given regex search pattern with the given replacement string across the set of all Grafana dashboards.
+HEREDOC
+replace() {
+  [[ -z "${1:-}" ]] && _exit_1 printf "find(): <search> required.\\n"
+  [[ -z "${2:-}" ]] && _exit_1 printf "find(): <replace> required.\\n"
+  _run_container castor grafkit:replace "${1}" "${2}"
 }
 
 # Shell #######################################################################

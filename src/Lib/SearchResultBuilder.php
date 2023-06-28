@@ -5,16 +5,16 @@ namespace Grafkit\Lib;
 use Grafkit\Cache\DashboardCache;
 use Grafkit\Client\DashboardMetadata;
 
-class GrepResultBuilder
+class SearchResultBuilder
 {
     private string $path;
     private string $pattern;
 
     /**
      * @param string $result
-     * @return GrepResult|null
+     * @return SearchResult|null
      */
-    public static function fromString(string $result): ?GrepResult
+    public static function fromString(string $result): ?SearchResult
     {
         if (empty($result)) {
             return null;
@@ -23,25 +23,25 @@ class GrepResultBuilder
         $tokens = explode(':', $result, 2);
         $path = $tokens[0];
         $pattern = $tokens[1];
-        return GrepResultBuilder::new()
+        return SearchResultBuilder::new()
             ->withPath($path)
             ->withPattern($pattern)
             ->build();
     }
 
     /**
-     * @return GrepResultBuilder
+     * @return SearchResultBuilder
      */
-    public static function new(): GrepResultBuilder
+    public static function new(): SearchResultBuilder
     {
-        return new GrepResultBuilder();
+        return new SearchResultBuilder();
     }
 
     /**
      * @param string $path
-     * @return GrepResultBuilder
+     * @return SearchResultBuilder
      */
-    public function withPath(string $path): GrepResultBuilder
+    public function withPath(string $path): SearchResultBuilder
     {
         $this->path = $path;
         return $this;
@@ -49,22 +49,22 @@ class GrepResultBuilder
 
     /**
      * @param string $pattern
-     * @return GrepResultBuilder
+     * @return SearchResultBuilder
      */
-    public function withPattern(string $pattern): GrepResultBuilder
+    public function withPattern(string $pattern): SearchResultBuilder
     {
         $this->pattern = $pattern;
         return $this;
     }
 
     /**
-     * @return GrepResult
+     * @return SearchResult
      */
-    public function build(): GrepResult
+    public function build(): SearchResult
     {
         $label = '';
         $dashboardMetadata = $this->getDashboardMetadata($this->path, $label);
-        return new GrepResult(
+        return new SearchResult(
             $label,
             $dashboardMetadata->uid,
             $dashboardMetadata->url,
