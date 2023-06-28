@@ -70,9 +70,9 @@ class App
     /**
      * Returns a list of all cached dashboards that contain the given {@see $search} pattern.
      *
+     * @internal Performs exact string matches.
      * @param string $search
      * @return SearchResult[]
-     *@internal Performs exact string matches.
      */
     public function searchDashboards(string $search): array
     {
