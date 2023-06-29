@@ -792,6 +792,19 @@ build() {
   fi
 }
 
+# Batch Replace ##############################################################
+
+describe "batch_replace" <<HEREDOC
+Usage:
+  ${_ME} batch_replace <filename>
+
+Description:
+  Replaces the search patterns with the replacement strings found in the given filename across the set of all Grafana dashboards.
+HEREDOC
+batch_replace() {
+  _run_container castor grafkit:batch-replace "${1-}"
+}
+
 # Cache #######################################################################
 
 describe "cache" <<HEREDOC
@@ -812,7 +825,7 @@ Usage:
   ${_ME} find <search>
 
 Description:
-  Find the set of all Grafana dashboards that contain the given regex search pattern.
+  Find the set of all Grafana dashboards that contain the given search pattern.
 HEREDOC
 find() {
   [[ -z "${1:-}" ]] && _exit_1 printf "find(): <search> required.\\n"
@@ -826,7 +839,7 @@ Usage:
   ${_ME} replace <search> <replace>
 
 Description:
-  Replaces the given regex search pattern with the given replacement string across the set of all Grafana dashboards.
+  Replaces the given search pattern with the given replacement string across the set of all Grafana dashboards.
 HEREDOC
 replace() {
   [[ -z "${1:-}" ]] && _exit_1 printf "find(): <search> required.\\n"

@@ -22,6 +22,7 @@ Help:
   grafkit help [<subcommand>]
 
 Available subcommands:
+  batch_replace
   build
   cache
   find
