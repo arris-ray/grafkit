@@ -32,12 +32,16 @@ Available subcommands:
   version
 ```
 # Pre-requisites
-- [Docker](https://www.docker.com/)
-- [Direnv](https://direnv.net/)
-- Command line shell, e.g. Bash
+> ℹ️ **NOTE:** Currently, Grafkit only supports authorization to Grafana services via OIDC tokens.
+- MacOS `security` - Keychain management for access to the Google Chrome Cookie Jar.
+- [Google Chrome](https://www.google.com/chrome/) - Web browser to request an OIDC token for access to Grafana instances.
+- [Docker](https://www.docker.com/) - Container runtime engine to run the Grafkit appplication.
+- [Direnv](https://direnv.net/) - Command line shell extension to configure the Grafkit runtime environment.
+- Command line shell, e.g. Bash - A command line environment to run Grafkit.
 
 # Setup
 You'll need to perform the following steps in the following order as a one-time setup process:
+- Visit each of your Grafana instances in the Google Chrome browser to ensure you're browser has been cookied with a valid OIDC token.
 - `cd grafkit` - Navigate to your Grafkit installation in a terminal.
 - `cp config/config.yaml.example config/config.yaml` - Configure Grafkit to interact with your Grafana instance(s).
 - `direnv allow` - Configure the terminal environment for running Grafkit.
