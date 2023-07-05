@@ -47,6 +47,7 @@ You'll need to perform the following steps in the following order as a one-time 
 - `cp config/config.yaml.example config/config.yaml` - Configure Grafkit to interact with your Grafana instance(s).
 - `direnv allow` - Configure the terminal environment for running Grafkit.
 - `grafkit build` - Build the Grafkit Docker image.
+- `grafkit vendor` - Install Grafkit Composer dependencies.
 - `grafkit cache` - Create a local cache of dashboards from all your configured Grafana instances.
 
 # Commands

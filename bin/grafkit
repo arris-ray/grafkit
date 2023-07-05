@@ -574,6 +574,9 @@ do
     -t|--test)
       _SUBCOMMAND="test"
       ;;
+    -v|--vendor)
+      _SUBCOMMAND="vendor"
+      ;;
     --version)
       _SUBCOMMAND="version"
       ;;
@@ -858,6 +861,19 @@ Description:
 HEREDOC
 shell() {
   _run_container bash
+}
+
+# Vendor ######################################################################
+
+describe "vendor" <<HEREDOC
+Usage:
+  ${_ME} vendor
+
+Description:
+  Installs ${_ME} Composer dependencies.
+HEREDOC
+vendor() {
+  _run_container composer install
 }
 
 ###############################################################################
