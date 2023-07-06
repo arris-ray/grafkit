@@ -1,0 +1,3 @@
+export ROOT_DIR="$(expand_path .)"
+export CHROME_COOKIE_JAR_FILEPATH="/path/to/google/chrome/profile/cookies"
+PATH_add bin

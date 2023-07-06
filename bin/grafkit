@@ -376,7 +376,9 @@ _piped_input() {
 #   1 (error,  false)  If the current input is interactive (eg, a shell).
 _run_container() {
   # Copy the Chrome Cookie Jar locally
-  cp "/Users/aray/Library/Application Support/Google/Chrome/Default/Cookies" "$(pwd)/resources/cookies"
+  rm -f "$(pwd)/resources/cookies"
+  cp -f "${CHROME_COOKIE_JAR_FILEPATH}" "$(pwd)/resources/cookies"
+  echo "${CHROME_COOKIE_JAR_FILEPATH}"
 
   # Request login password to decrypt stored cookies
   local PASSWORD
@@ -389,7 +391,7 @@ _run_container() {
     grafkit "${@}"
 
   # Remove the local copy of the Chrome Cookie Jar
-  rm "$(pwd)/resources/cookies"
+  rm -f "$(pwd)/resources/cookies"
 }
 
 ###############################################################################

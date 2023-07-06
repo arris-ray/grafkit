@@ -44,6 +44,7 @@ Available subcommands:
 You'll need to perform the following steps in the following order as a one-time setup process:
 - Visit each of your Grafana instances in the Google Chrome browser to ensure you're browser has been cookied with a valid OIDC token.
 - `cd grafkit` - Navigate to your Grafkit installation in a terminal.
+- `cp .envrc.example .envrc` - Configure Grafkit with the path to your Google Chrome cookie jar.
 - `cp config/config.yaml.example config/config.yaml` - Configure Grafkit to interact with your Grafana instance(s).
 - `direnv allow` - Configure the terminal environment for running Grafkit.
 - `grafkit build` - Build the Grafkit Docker image.

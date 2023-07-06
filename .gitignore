@@ -1,3 +1,5 @@
-.idea/
-vendor/
 config/grafkit.yaml
+vendor/
+.idea/
+.DS_Store
+.envrc
