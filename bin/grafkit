@@ -378,7 +378,6 @@ _run_container() {
   # Copy the Chrome Cookie Jar locally
   rm -f "$(pwd)/resources/cookies"
   cp -f "${CHROME_COOKIE_JAR_FILEPATH}" "$(pwd)/resources/cookies"
-  echo "${CHROME_COOKIE_JAR_FILEPATH}"
 
   # Request login password to decrypt stored cookies
   local PASSWORD
