@@ -8,11 +8,11 @@ use Grafkit\Lib\ReplacementPairs;
 use Grafkit\Lib\SearchResult;
 
 #[AsTask]
-function batch_replace(string $filename): void
+function batch_replace(string $filename, bool $dry_run = false): void
 {
     $pairs = ReplacementPairs::fromFile($filename);
     foreach ($pairs as $search => $replace) {
-        replace($search, $replace);
+        replace($search, $replace, $dry_run);
     }
 }
 
@@ -31,14 +31,16 @@ function find(string $search): void
 }
 
 #[AsTask]
-function replace(string $search, string $replace): void
+function replace(string $search, string $replace, bool $dry_run): void
 {
     $searchResults = App::getInstance()->searchDashboards("$search");
     displaySearchResults($searchResults, $search, $replace);
-    promptForConfirmation();
 
-    $replaceResults = App::getInstance()->replaceInDashboards($search, $replace, $searchResults);
-    displayReplaceResults($replaceResults);
+    if ($dry_run === false) {
+        promptForConfirmation();
+        $replaceResults = App::getInstance()->replaceInDashboards($search, $replace, $searchResults);
+        displayReplaceResults($replaceResults);
+    }
 }
 
 /**
@@ -78,6 +80,7 @@ function displaySearchResults(array $searchResults, string $search, ?string $rep
 
     // Display search parameters
     echo PHP_EOL;
+    echo "---" . PHP_EOL;
     echo "# SEARCH PARAMETERS" . PHP_EOL;
     echo "- Search: {$search}" . PHP_EOL;
     if ($replace !== null) {

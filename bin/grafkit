@@ -800,13 +800,37 @@ build() {
 
 describe "batch_replace" <<HEREDOC
 Usage:
-  ${_ME} batch_replace <filename>
+  ${_ME} batch_replace <filename> [--dry-run]
 
 Description:
   Replaces the search patterns with the replacement strings found in the given filename across the set of all Grafana dashboards.
 HEREDOC
 batch_replace() {
-  _run_container castor grafkit:batch-replace "${1-}"
+  local _dry_run=0
+  local _filename="${1-}"
+  shift
+
+  for __arg in "${@:-}"
+  do
+    case ${__arg} in
+      --dry-run)
+        _dry_run=1
+        ;;
+      *)
+        if ! _blank "${__arg}"
+        then
+          _exit_1 printf "Unexpected option: %s\\n" "${__arg}"
+        fi
+        ;;
+    esac
+  done
+
+  if [[ "${_dry_run}" -eq 1 ]]
+  then
+    _run_container castor grafkit:batch-replace "${_filename}" --dry-run
+  else
+    _run_container castor grafkit:batch-replace "${_filename}"
+  fi
 }
 
 # Cache #######################################################################
@@ -848,7 +872,33 @@ HEREDOC
 replace() {
   [[ -z "${1:-}" ]] && _exit_1 printf "find(): <search> required.\\n"
   [[ -z "${2:-}" ]] && _exit_1 printf "find(): <replace> required.\\n"
-  _run_container castor grafkit:replace "${1}" "${2}"
+
+  local _search="${1-}"
+  local _replace="${2-}"
+  shift
+  shift
+
+  for __arg in "${@:-}"
+  do
+    case ${__arg} in
+      --dry-run)
+        _dry_run=1
+        ;;
+      *)
+        if ! _blank "${__arg}"
+        then
+          _exit_1 printf "Unexpected option: %s\\n" "${__arg}"
+        fi
+        ;;
+    esac
+  done
+
+  if [[ "${_dry_run}" -eq 1 ]]
+  then
+    _run_container castor grafkit:replace "${_search}" "${_replace}" --dry-run
+  else
+    _run_container castor grafkit:replace "${_search}" "${_replace}"
+  fi
 }
 
 # Shell #######################################################################
