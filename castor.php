@@ -31,7 +31,7 @@ function find(string $search): void
 }
 
 #[AsTask]
-function replace(string $search, string $replace, bool $dry_run): void
+function replace(string $search, string $replace, bool $dry_run = false): void
 {
     $searchResults = App::getInstance()->searchDashboards("$search");
     displaySearchResults($searchResults, $search, $replace);
@@ -48,8 +48,7 @@ function replace(string $search, string $replace, bool $dry_run): void
  */
 function promptForConfirmation(): void
 {
-    echo "Are you sure you want to proceed? (y/N) ";
-    $confirmation = trim(fgets(STDIN));
+    $confirmation = trim(readline("Are you sure you want to proceed? (y/N) "));
     if ($confirmation !== 'y') {
         echo "Bye!" . PHP_EOL . PHP_EOL;
         exit (0);
