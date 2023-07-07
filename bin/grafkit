@@ -873,6 +873,7 @@ replace() {
   [[ -z "${1:-}" ]] && _exit_1 printf "find(): <search> required.\\n"
   [[ -z "${2:-}" ]] && _exit_1 printf "find(): <replace> required.\\n"
 
+  local _dry_run=0
   local _search="${1-}"
   local _replace="${2-}"
   shift
