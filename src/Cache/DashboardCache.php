@@ -7,7 +7,9 @@ use Grafkit\Client\DashboardMetadata;
 use Grafkit\Client\DashboardMetadataBuilder;
 use Grafkit\Lib\Env;
 use Grafkit\Lib\Singleton;
-use mysql_xdevapi\Warning;
+use InvalidArgumentException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class DashboardCache
 {
@@ -17,6 +19,16 @@ class DashboardCache
      * @var string
      */
     public const DASHBOARD_METADATA_FILENAME = 'metadata.json';
+
+    /**
+     * @param string $label
+     * @return void
+     */
+    public function clearCache(string $label): void
+    {
+        $dir = $this->getOrCreateDashboardCacheDirectory($label);
+        $this->deleteCacheDirectory($dir);
+    }
 
     /**
      * @param string $label
@@ -154,5 +166,29 @@ class DashboardCache
             mkdir($dir, 0777, true);
         }
         return $dir;
+    }
+
+    /**
+     * @param string $dirName
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    private function deleteCacheDirectory(string $dirName): void
+    {
+        if (is_dir($dirName)) {
+            $dir = new RecursiveDirectoryIterator($dirName, FilesystemIterator::SKIP_DOTS);
+            foreach (new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::CHILD_FIRST) as $object) {
+                if ($object->isFile()) {
+                    unlink($object);
+                } elseif($object->isDir()) {
+                    rmdir($object);
+                } else {
+                    throw new InvalidArgumentException('Unknown object type: '. $object->getFileName());
+                }
+            }
+            rmdir($dirName);
+        } else {
+            throw new InvalidArgumentException('This is not a directory');
+        }
     }
 }

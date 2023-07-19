@@ -59,6 +59,10 @@ class App
         }
 
         foreach ($hostnames as $hostname) {
+            // Clear any existing cache
+            DashboardCache::getInstance()->clearCache($hostname->label);
+
+            // Refresh the cache from the given Grafana hostname
             $client = new GrafanaClient($hostname->label, $hostname->url);
             $dashboards = $client->getDashboardMetadatas(true);
             foreach ($dashboards as $dashboard) {
