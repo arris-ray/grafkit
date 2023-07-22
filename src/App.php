@@ -82,7 +82,7 @@ class App
     {
         $dir = Env::DIR_RESOURCES_CACHE_DASHBOARD;
         $metadataFilename = DashboardCache::DASHBOARD_METADATA_FILENAME;
-        $command = "grep -oRw \"{$search}\" {$dir} --exclude '{$metadataFilename}'";
+        $command = "grep -oFR \"{$search}\" {$dir} --exclude '{$metadataFilename}'";
         $output = shell_exec($command);
         $output ??= "";
 
